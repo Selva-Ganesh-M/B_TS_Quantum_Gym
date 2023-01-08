@@ -1,6 +1,6 @@
-import express, { NextFunction, Request, Response } from "express";
 import dotenv from "dotenv";
 dotenv.config();
+import express, { NextFunction, Request, Response } from "express";
 import cors from "cors";
 import corsOptions from "./config/corsOptions";
 import LogMaintainer from "./middleware/LogMaintainer";
