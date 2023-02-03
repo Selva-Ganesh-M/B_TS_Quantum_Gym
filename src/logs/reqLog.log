@@ -1,2 +1,8 @@
 2023-01-08	22:26:32	4ef39d61-438a-4ea0-b9f9-a614e20ed56e	GET	/	undefined
 2023-01-08	22:26:49	61805268-5a3d-4ca4-8584-0b63619cab23	GET	/	undefined
+2023-02-03	17:03:12	7b244a40-8cda-4944-b041-d4917b2ab385	POST	/	http://localhost:8000
+2023-02-03	18:16:41	8ead7325-4f86-4fe8-af41-661d52d7d434	POST	/	http://localhost:8000
+2023-02-04	02:41:48	9a5c3b0b-d751-41ff-8f25-55adc9c0a5c6	POST	/	http://localhost:8000
+2023-02-04	03:20:16	1cc9e066-6122-43f2-b2ba-b895196050af	POST	/api/auth/signup	http://localhost:8000
+2023-02-04	03:25:54	db93f33b-09e0-4808-abd7-59a4c11417a8	POST	/api/auth/signup	http://localhost:8000
+2023-02-04	03:29:04	b6b21819-3a62-4ad5-93ed-a951a7b1ed27	POST	/api/auth/signup	http://localhost:8000
