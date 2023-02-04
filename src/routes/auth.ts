@@ -13,8 +13,8 @@ router.post("/signup", zodSchemaInjector(authSchema.signup),authController.signu
 // login
 router.post("/login", zodSchemaInjector(authSchema.login), authController.login)
 
-// // google auth
-// router.post("/google", validator(authSchema.googleSignUp),authController.googleSignUp)
+// google auth
+router.post("/google", zodSchemaInjector(authSchema.googleAuth),authController.googleAuth)
 
 
 export const authRouter = router

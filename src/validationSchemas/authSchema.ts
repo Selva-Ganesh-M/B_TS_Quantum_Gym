@@ -65,13 +65,18 @@ const signup = object({
   
   
   // google signup
-  const googleSignUp = object({
+  const googleAuth = object({
       body: object({
           // username
           username: string({
               required_error: "username is a required field."
           }),
-  
+          
+          // fullname
+        fullname: string({
+          required_error: "username is a required field."
+      }),
+
           // email
           email: string({
               required_error: "Email is a required field",
@@ -80,7 +85,15 @@ const signup = object({
           // image
           image: string({
               required_error: "Email is a required field",
-            }).optional(),
+            }),
+
+          // age
+        age: number({required_error: "Age is a required field"}),
+
+        // gender
+        gender: string({
+          required_error: "Email is a required field",
+        })
       })
     })
 
@@ -106,10 +119,12 @@ export type TAuthSigninRequest = TypeOf<typeof login>
 
 export type TAuthSigninRequestBody = TAuthSigninRequest["body"]
 
+export type TGoogleAuthBody = TypeOf<typeof googleAuth>["body"]
+
 
 
 
 // exports
 export const authSchema = {
-    signup, login, googleSignUp
+    signup, login, googleAuth
 }

@@ -6,6 +6,7 @@ import { JWT_SECRET } from "../config/ENV";
 import { customError } from "../utils/customError";
 import hashPassword from "../utils/hashPassword";
 import bcrypt from "bcryptjs"
+import { TGoogleAuthBody } from "../validationSchemas/authSchema";
 
 // sign up
 const signup = asyncHandler(
@@ -36,7 +37,6 @@ const signup = asyncHandler(
         })
     }
 )
-
 
 // login
 
@@ -81,5 +81,62 @@ const login = asyncHandler(
     }
 )
 
-const authController = {signup, login}
+// google auth
+const googleAuth = asyncHandler(
+    async (req: Request<{}, {}, TGoogleAuthBody>, res:Response) => {
+        const {email} = req.body
+        const user = await userModel.findOne({email}).lean()
+        // if user exists login in
+        if (user){
+            // jwt prep
+            const token = jwt.sign({email, _id:user._id}, JWT_SECRET!)
+            
+            // response prep
+            const response = user as Partial<IUser>;
+            response.password = undefined;
+
+            // response
+            res
+            .cookie("access_token", token, {
+                httpOnly: true
+            })
+            .status(200)
+            .json({
+                statusText: "success",
+                statusCode: 200,
+                message: "user sign in successful.",
+                payload: response
+            })
+        }else{
+            // if user not exist create user and log in
+            // creating new user
+            const user = new userModel<Omit<IUser, "password">>({...req.body});
+            await user.save();
+            
+            // fetching newly created user
+            const createdUser = await userModel.findOne({email: req.body.email}).lean().select("-password")
+            if (!createdUser) {
+            throw new customError(422, "user creation is successful. user fetch failed.")
+        }
+        
+        // jwt prep
+        const token = jwt.sign({email, _id:user._id}, JWT_SECRET!)
+        
+        // response
+        res
+        .cookie("access_token", token, {
+            httpOnly: true
+        })
+        .status(201).json({
+        statusText:"success",
+        statusCode:201,
+        message: "new user created and signed in",
+        payload: createdUser
+        })
+    
+        }
+    }
+)
+
+const authController = {signup, login, googleAuth}
 export default authController
