@@ -10,8 +10,8 @@ const router = express.Router();
 // signup - create user
 router.post("/signup", zodSchemaInjector(authSchema.signup),authController.signup)
 
-// // signin
-// router.post("/signin", validator(authSchema.signin),authController.signin)
+// login
+router.post("/login", zodSchemaInjector(authSchema.login), authController.login)
 
 // // google auth
 // router.post("/google", validator(authSchema.googleSignUp),authController.googleSignUp)

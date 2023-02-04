@@ -84,8 +84,8 @@ const signup = object({
       })
     })
 
-// signin   
-const signin = object({
+// login   
+const login = object({
     body: object({
         email: string({
             required_error: "Email is a required field",
@@ -102,7 +102,7 @@ const signin = object({
     })
 })
 
-export type TAuthSigninRequest = TypeOf<typeof signin>
+export type TAuthSigninRequest = TypeOf<typeof login>
 
 export type TAuthSigninRequestBody = TAuthSigninRequest["body"]
 
@@ -111,5 +111,5 @@ export type TAuthSigninRequestBody = TAuthSigninRequest["body"]
 
 // exports
 export const authSchema = {
-    signup, signin, googleSignUp
+    signup, login, googleSignUp
 }
