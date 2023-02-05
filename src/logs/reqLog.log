@@ -17,3 +17,10 @@
 2023-02-04	16:32:28	4680f2bd-6d73-4239-89ed-a35b8ffba19c	POST	/api/auth/google	http://localhost:8000
 2023-02-04	16:47:24	b612989a-c920-4585-b8e2-fcf5fe40141d	POST	/api/auth/google	http://localhost:8000
 2023-02-04	16:48:55	7ce2de1e-cdff-439f-891c-e5382533c265	POST	/api/auth/google	http://localhost:8000
+2023-02-04	17:13:40	08265a7a-b36c-426d-96b2-5dc857d397a8	POST	/api/auth/login	http://localhost:8000
+2023-02-04	17:15:25	855017db-0ed6-476b-a162-01e93b33b0b6	POST	/api/auth/login	http://localhost:8000
+2023-02-04	17:16:28	b6fa2b07-7c88-4060-814f-27993529f0eb	POST	/api/auth/google	http://localhost:8000
+2023-02-04	17:54:01	88ce226e-d8e3-4741-b145-915f30e141be	POST	/api/auth/google	http://localhost:8000
+2023-02-05	05:34:50	6a12e5c8-3783-4d4a-8457-60bc24b06251	POST	/api/auth/google	http://localhost:8000
+2023-02-05	05:41:26	8dc20721-c88d-4925-b67a-6f741d1328d7	POST	/api/auth/google	http://localhost:8000
+2023-02-05	05:46:48	455f3bb0-23f5-4194-a60f-5839ba24043a	POST	/api/auth/google	http://localhost:8000

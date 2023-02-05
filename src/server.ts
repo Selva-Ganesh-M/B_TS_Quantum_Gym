@@ -16,7 +16,9 @@ const server = express();
 server.use(express.json())
 server.use(customReqLogger)
 server.use(cors(corsOptions));
-server.use(LogMaintainer);
+
+// just for now stopping log LogMaintainer
+// server.use(LogMaintainer);
 
 // custom routes
 server.use("/api/auth", authRouter)
