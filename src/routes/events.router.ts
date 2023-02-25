@@ -8,11 +8,15 @@ import { eventVSchema } from "../validationSchemas/event.vali.sche";
 
 const router = express.Router();
 
+// create event
 router.post(
   "/create",
   authorization,
   zodSchemaInjector(eventVSchema.create),
   eventctrl.create
 );
+
+// get all events
+router.get("/", authorization, eventctrl.getAll);
 
 export const eventsRouter = router;

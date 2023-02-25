@@ -3,6 +3,28 @@ import asyncHandler from "express-async-handler";
 import EventModel, { IPEvent } from "../models/events.model";
 import { customError } from "../utils/customError";
 
+// get all event
+const getAll = asyncHandler(async (req: Request, res: Response) => {
+  // fetching all posts
+  const events = await EventModel.find();
+
+  // if mongoose failed on fetching all posts
+  if (!events)
+    throw new customError(
+      500,
+      "fetching events failed: mongoose returned null"
+    );
+
+  // response
+  res.status(200).json({
+    statusText: "success",
+    statusCode: 200,
+    message: "fetch all events success",
+    payload: events,
+  });
+});
+
+// create event
 const create = asyncHandler(
   async (req: Request<{}, {}, IPEvent>, res: Response) => {
     // create new event
@@ -26,4 +48,4 @@ const create = asyncHandler(
   }
 );
 
-export const eventctrl = { create };
+export const eventctrl = { create, getAll };
