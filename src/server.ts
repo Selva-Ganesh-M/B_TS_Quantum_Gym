@@ -12,6 +12,7 @@ import { authRouter } from "./routes/auth";
 import customReqLogger from "./utils/customRequestLogger";
 import { eventsRouter } from "./routes/events.router";
 import cookies from "cookie-parser";
+import workoutRouter from "./routes/workout.route";
 console.log("server");
 
 const server = express();
@@ -28,6 +29,8 @@ server.use(cookies());
 server.use("/api/auth", authRouter);
 // event routes
 server.use("/api/events", eventsRouter);
+// workout routes
+server.use("/api/workouts", workoutRouter);
 
 // custom error handler
 server.use(customErrorHandler);
