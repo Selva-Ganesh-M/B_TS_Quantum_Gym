@@ -16,6 +16,22 @@ router.post(
   eventctrl.create
 );
 
+// enroll event
+router.patch(
+  "/enroll/:id",
+  authorization,
+  zodSchemaInjector(eventVSchema.enroll),
+  eventctrl.enroll
+);
+
+// withdraw event
+router.patch(
+  "/withdraw/:id",
+  authorization,
+  zodSchemaInjector(eventVSchema.withdraw),
+  eventctrl.withdraw
+);
+
 // get all events
 router.get("/", authorization, eventctrl.getAll);
 

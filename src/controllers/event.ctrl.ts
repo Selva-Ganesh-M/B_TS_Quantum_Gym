@@ -48,4 +48,91 @@ const create = asyncHandler(
   }
 );
 
-export const eventctrl = { create, getAll };
+// enroll event
+const enroll = asyncHandler(
+  async (req: Request<{ id: string }>, res: Response) => {
+    const { id } = req.params;
+    // check if the event exist
+    const event = await EventModel.findById(id);
+
+    // if event not exist throw error
+    if (!event)
+      throw new customError(
+        404,
+        "enroll event  failed: requested event not found"
+      );
+
+    // enroll event
+    const updatedEvent = await EventModel.findByIdAndUpdate(
+      id,
+      {
+        $addToSet: {
+          registrations: req.user?._id,
+        },
+      },
+      {
+        upsert: true,
+        new: true,
+      }
+    );
+
+    // if mongoose sent null throw error
+    if (!updatedEvent)
+      throw new customError(500, "enroll event failed: mongoose returned null");
+
+    // response
+    res.status(200).json({
+      statusText: "success",
+      statusCode: 200,
+      message: "enroll event successful",
+      payload: updatedEvent,
+    });
+  }
+);
+
+// withdraw event
+const withdraw = asyncHandler(
+  async (req: Request<{ id: string }>, res: Response) => {
+    const { id } = req.params;
+    // check if the event exist
+    const event = await EventModel.findById(id);
+
+    // if event not exist throw error
+    if (!event)
+      throw new customError(
+        404,
+        "enroll event  failed: requested event not found"
+      );
+
+    // enroll event
+    const updatedEvent = await EventModel.findByIdAndUpdate(
+      id,
+      {
+        $pull: {
+          registrations: req.user?._id,
+        },
+      },
+      {
+        upsert: true,
+        new: true,
+      }
+    );
+
+    // if mongoose sent null throw error
+    if (!updatedEvent)
+      throw new customError(
+        500,
+        "withdraw event failed: mongoose returned null"
+      );
+
+    // response
+    res.status(200).json({
+      statusText: "success",
+      statusCode: 200,
+      message: "withdraw from event successful",
+      payload: updatedEvent,
+    });
+  }
+);
+
+export const eventctrl = { create, getAll, enroll, withdraw };

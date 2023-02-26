@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import {
   z,
   object,
@@ -10,6 +11,16 @@ import {
   ZodAny,
 } from "zod";
 
+// params mongoose id check
+export const paramsMongooseIdCheck = z.object({
+  params: z.object({
+    id: string().refine((id) => mongoose.isValidObjectId(id), {
+      message: "not a valid mongoose id.",
+    }),
+  }),
+});
+
+// create
 const create = object({
   body: object({
     title: string({
@@ -43,4 +54,10 @@ const create = object({
   }),
 });
 
-export const eventVSchema = { create };
+// enroll
+const enroll = paramsMongooseIdCheck;
+
+// enroll
+const withdraw = paramsMongooseIdCheck;
+
+export const eventVSchema = { create, enroll, withdraw };
