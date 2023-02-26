@@ -32,6 +32,14 @@ router.patch(
   eventctrl.withdraw
 );
 
+// search event
+router.get(
+  "/search",
+  authorization,
+  zodSchemaInjector(eventVSchema.search),
+  eventctrl.search
+);
+
 // get all events
 router.get("/", authorization, eventctrl.getAll);
 

@@ -60,4 +60,21 @@ const enroll = paramsMongooseIdCheck;
 // enroll
 const withdraw = paramsMongooseIdCheck;
 
-export const eventVSchema = { create, enroll, withdraw };
+// search
+const search = z.object({
+  query: z.object({
+    src: string({
+      required_error: "query paramameter must have src attribute",
+    }).refine(
+      (src) => {
+        if (!src.length) return false;
+        return true;
+      },
+      {
+        message: "src attribute in query parameter can't by empty",
+      }
+    ),
+  }),
+});
+
+export const eventVSchema = { create, enroll, withdraw, search };

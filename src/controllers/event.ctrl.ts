@@ -135,4 +135,27 @@ const withdraw = asyncHandler(
   }
 );
 
-export const eventctrl = { create, getAll, enroll, withdraw };
+// search events
+const search = asyncHandler(
+  async (req: Request<{}, {}, {}, { src: string }>, res: Response) => {
+    const { src } = req.query;
+
+    // find matching events
+    const events = await EventModel.find({
+      title: {
+        $regex: src,
+        $options: "i",
+      },
+    }).lean();
+
+    // response
+    res.status(200).json({
+      status: "success",
+      message:
+        events.length > 0 ? "fetch successful" : "no events matched with query",
+      payload: events,
+    });
+  }
+);
+
+export const eventctrl = { create, getAll, enroll, withdraw, search };
