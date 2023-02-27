@@ -22,7 +22,6 @@ export const authorization = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     // token verification
     const token = req.cookies.access_token;
-    console.log("cookie: ", req.cookies);
 
     if (!token)
       throw new customError(401, "authorization failed: missing access_token.");

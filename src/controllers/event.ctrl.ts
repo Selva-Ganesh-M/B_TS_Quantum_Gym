@@ -158,4 +158,25 @@ const search = asyncHandler(
   }
 );
 
+const deleteEvent = asyncHandler(
+  async (req: Request<{ id: string }>, res: Response) => {
+    // comment's presence
+    const event = await EventModel.findById(req.params.id).lean();
+
+    if (!event)
+      throw new customError(404, "delete event failed: event not found");
+
+    // delete event
+    const deletedEvent = await EventModel.findByIdAndDelete(req.params.id);
+
+    // response
+    res.status(200).json({
+      statusText: "success",
+      statusCode: 200,
+      message: "event deleted",
+      payload: deletedEvent,
+    });
+  }
+);
+
 export const eventctrl = { create, getAll, enroll, withdraw, search };
