@@ -1,24 +1,72 @@
 import { Request, Response } from "express";
 import asyncHandler from "express-async-handler";
-import WorkoutModel, { IPWorkout } from "../models/workout.model";
+import WorkoutModel from "../models/workout.model";
 import { customError } from "../utils/customError";
 import hasPrivilege from "../utils/hasPrivilege";
 
-export type TPWorkout = Omit<IPWorkout, "superSetWith" | "likes" | "comments">;
+export interface IWorkout {
+  title: string;
+  desc: string;
+  category: string;
+  focuses: Array<string>;
+  sets: number;
+  reps: number;
+  dropset: boolean;
+  superSetWith: Array<string>;
+  imgUrl: string;
+  videoUrl: string;
+  likes: Array<string>;
+  comments: Array<string>;
+  userId: string;
+}
 
 // get all workouts
-const getAll = asyncHandler(async (req: Request, res: Response) => {
-  // fetching workouts
-  const workouts = await WorkoutModel.find();
+const getAll = asyncHandler(
+  async (
+    req: Request<{}, {}, {}, { cat: string; focuses: string }>,
+    res: Response
+  ) => {
+    // deciding which data to fetch
+    const { cat, focuses: strFocuses } = req.query;
+    const focuses = strFocuses ? strFocuses.split(",") : null;
+    console.log(cat);
 
-  // response
-  res.status(200).json({
-    statusText: "success",
-    statusCode: 200,
-    message: "fetch workouts success",
-    payload: workouts,
-  });
-});
+    let workouts;
+    // fetching workouts
+    if (cat && focuses) {
+      console.log("cat && focuses");
+      workouts = await WorkoutModel.find({
+        category: cat,
+        focuses: {
+          $in: focuses,
+        },
+      });
+    } else if (cat) {
+      console.log("cat");
+      workouts = await WorkoutModel.find({ category: cat });
+    } else if (focuses) {
+      console.log("focuses");
+      workouts = await WorkoutModel.find({
+        focuses: {
+          $in: focuses,
+        },
+      });
+    } else {
+      console.log("all");
+      workouts = await WorkoutModel.find();
+    }
+
+    workouts = workouts.sort((a, b) => b.likes.length - a.likes.length);
+
+    // response
+    res.status(200).json({
+      statusText: "success",
+      statusCode: 200,
+      message: "fetch workouts success",
+      payload: workouts,
+    });
+  }
+);
 
 // get one
 const getOne = asyncHandler(
@@ -40,8 +88,29 @@ const getOne = asyncHandler(
 
 // create workout
 const create = asyncHandler(
-  async (req: Request<{}, {}, TPWorkout>, res: Response) => {
+  async (
+    req: Request<{}, {}, Omit<IWorkout, "likes" | "comments">>,
+    res: Response
+  ) => {
     const data = req.body;
+
+    // check if all ids in the superset are valid workout ids
+    const response = await Promise.all(
+      req.body.superSetWith.map(async (id) => {
+        if (await WorkoutModel.findById(id)) {
+          return true;
+        } else {
+          return false;
+        }
+      })
+    );
+
+    if (!response.every(Boolean)) {
+      throw new customError(
+        400,
+        "create workout failed: supsetwith has valid mongoose ids but not workout ids"
+      );
+    }
 
     // create workout
     const workout = new WorkoutModel(req.body);
@@ -99,7 +168,7 @@ const deleteWorkout = asyncHandler(
 // update workout
 const update = asyncHandler(
   async (
-    req: Request<{ id: string }, {}, Partial<TPWorkout>>,
+    req: Request<{ id: string }, {}, Partial<IWorkout>>,
     res: Response
   ) => {
     const { id: workoutId } = req.params;
@@ -128,9 +197,9 @@ const update = asyncHandler(
     );
 
     // response
-    res.status(204).json({
+    res.status(200).json({
       statusText: "success",
-      statusCode: 204,
+      statusCode: 200,
       message: "workout update successful",
       payload: updatedWorkout,
     });
@@ -164,9 +233,9 @@ const like = asyncHandler(
     );
 
     // response
-    res.status(204).json({
+    res.status(200).json({
       statusText: "success",
-      statusCode: 204,
+      statusCode: 200,
       message: "like a workout success",
       payload: updatedWorkout,
     });
@@ -200,11 +269,29 @@ const dislike = asyncHandler(
     );
 
     // response
-    res.status(204).json({
+    res.status(200).json({
       statusText: "success",
-      statusCode: 204,
+      statusCode: 200,
       message: "dislike a workout success",
       payload: updatedWorkout,
+    });
+  }
+);
+
+const getByCat = asyncHandler(
+  async (req: Request<{}, {}, {}, { cat: string }>, res: Response) => {
+    const { cat } = req.query;
+
+    // find workouts
+    let workouts = await WorkoutModel.find({ category: cat }).lean();
+    workouts = workouts.sort((a, b) => b.likes.length - a.likes.length);
+
+    // response
+    res.status(200).json({
+      statusText: "success",
+      statusCode: 200,
+      message: "fetch category success",
+      payload: workouts,
     });
   }
 );
@@ -217,4 +304,5 @@ export const WorkoutCtrl = {
   getOne,
   like,
   dislike,
+  getByCat,
 };

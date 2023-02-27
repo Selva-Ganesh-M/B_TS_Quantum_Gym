@@ -11,6 +11,14 @@ workoutRouter
 
   // #region : get requests
 
+  // get workouts by categories
+  // .get(
+  //   "/filter",
+  //   authorization,
+  //   zodSchemaInjector(workoutValiSchema.byCat),
+  //   WorkoutCtrl.getByCat
+  // )
+
   // get singleWorkout
   .get(
     "/:id",

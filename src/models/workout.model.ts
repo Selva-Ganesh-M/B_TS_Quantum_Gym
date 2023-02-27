@@ -1,6 +1,6 @@
 import mongoose, { Date, Document, Model } from "mongoose";
 
-export interface IPWorkout {
+export interface IWorkout {
   title: string;
   desc: string;
   category: string;
@@ -8,21 +8,21 @@ export interface IPWorkout {
   sets: number;
   reps: number;
   dropset: boolean;
-  superSetWith?: Array<string>;
+  superSetWith: Array<string>;
   imgUrl: string;
   videoUrl: string;
-  likes?: Array<string>;
-  comments?: Array<string>;
+  likes: Array<string>;
+  comments: Array<string>;
   userId: string;
 }
 
-export interface IPWorkoutDoc extends IPWorkout, Document {}
+export interface IWorkoutDoc extends IWorkout, Document {}
 
-export interface IPWorkoutLeanDoc extends IPWorkout {
+export interface IWorkoutLeanDoc extends IWorkout {
   _id: mongoose.Types.ObjectId;
 }
 
-const eventSchema = new mongoose.Schema<IPWorkout>(
+const eventSchema = new mongoose.Schema<IWorkout>(
   {
     title: {
       required: true,
@@ -99,5 +99,5 @@ const eventSchema = new mongoose.Schema<IPWorkout>(
   }
 );
 
-const WorkoutModel = mongoose.model<IPWorkoutDoc>("Workout", eventSchema);
+const WorkoutModel = mongoose.model<IWorkoutDoc>("Workout", eventSchema);
 export default WorkoutModel;
