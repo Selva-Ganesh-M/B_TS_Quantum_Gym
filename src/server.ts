@@ -13,6 +13,8 @@ import customReqLogger from "./utils/customRequestLogger";
 import { eventsRouter } from "./routes/events.router";
 import cookies from "cookie-parser";
 import workoutRouter from "./routes/workout.route";
+import { wCommentCtrl } from "./controllers/wcomments.ctrl";
+import { wCommentRouter } from "./routes/wcomment.router";
 console.log("server");
 
 const server = express();
@@ -31,6 +33,8 @@ server.use("/api/auth", authRouter);
 server.use("/api/events", eventsRouter);
 // workout routes
 server.use("/api/workouts", workoutRouter);
+// comments router
+server.use("/api/wComments", wCommentRouter);
 
 // custom error handler
 server.use(customErrorHandler);

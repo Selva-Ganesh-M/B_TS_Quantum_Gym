@@ -27,18 +27,20 @@ const WcommentSchema = new mongoose.Schema<IWComment>(
       type: String,
       required: true,
     },
-    likes: [
-      {
-        type: String,
-        required: true,
-      },
-    ],
+    likes: {
+      type: [
+        {
+          type: String,
+        },
+      ],
+      default: [],
+    },
   },
   {
     timestamps: true,
   }
 );
 
-const IWCommentModel = mongoose.model("WComment", WcommentSchema);
+const WCommentModel = mongoose.model("WComment", WcommentSchema);
 
-export default IWCommentModel;
+export default WCommentModel;

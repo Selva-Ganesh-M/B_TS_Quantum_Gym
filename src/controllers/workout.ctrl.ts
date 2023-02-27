@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import asyncHandler from "express-async-handler";
+import WCommentModel from "../models/Wcomment.model";
 import WorkoutModel from "../models/workout.model";
 import { customError } from "../utils/customError";
 import hasPrivilege from "../utils/hasPrivilege";
@@ -150,11 +151,8 @@ const deleteWorkout = asyncHandler(
     // deleting the workout
     const deletedWorkout = await WorkoutModel.findByIdAndDelete(workoutId);
 
-    if (!deletedWorkout)
-      throw new customError(
-        500,
-        "delete operation failed: mongoose returned null when trying to delete"
-      );
+    // deleting comments of the workout video
+    await WCommentModel.deleteMany({ userId });
 
     res.status(200).json({
       statusText: "success",
