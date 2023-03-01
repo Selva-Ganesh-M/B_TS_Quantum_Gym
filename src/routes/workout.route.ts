@@ -11,13 +11,8 @@ workoutRouter
 
   // #region : get requests
 
-  // get workouts by categories
-  // .get(
-  //   "/filter",
-  //   authorization,
-  //   zodSchemaInjector(workoutValiSchema.byCat),
-  //   WorkoutCtrl.getByCat
-  // )
+  // search for workout
+  .get("/search", authorization, WorkoutCtrl.search)
 
   // get singleWorkout
   .get(
@@ -26,6 +21,7 @@ workoutRouter
     zodSchemaInjector(paramsMongooseIdCheck),
     WorkoutCtrl.getOne
   )
+
   // get all workouts
   .get("/", authorization, WorkoutCtrl.getAll);
 

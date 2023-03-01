@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import asyncHandler from "express-async-handler";
 import EventModel, { IPEvent } from "../models/events.model";
 import { customError } from "../utils/customError";
+import hasPrivilege from "../utils/hasPrivilege";
 
 // get all event
 const getAll = asyncHandler(async (req: Request, res: Response) => {
@@ -162,9 +163,11 @@ const deleteEvent = asyncHandler(
   async (req: Request<{ id: string }>, res: Response) => {
     // comment's presence
     const event = await EventModel.findById(req.params.id).lean();
-
     if (!event)
       throw new customError(404, "delete event failed: event not found");
+
+    // has access to delete
+    hasPrivilege(req.user!._id.toString(), event.userId.toString());
 
     // delete event
     const deletedEvent = await EventModel.findByIdAndDelete(req.params.id);
@@ -179,4 +182,11 @@ const deleteEvent = asyncHandler(
   }
 );
 
-export const eventctrl = { create, getAll, enroll, withdraw, search };
+export const eventctrl = {
+  create,
+  getAll,
+  enroll,
+  withdraw,
+  search,
+  deleteEvent,
+};

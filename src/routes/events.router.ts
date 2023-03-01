@@ -4,7 +4,10 @@ import { eventctrl } from "../controllers/event.ctrl";
 import { authorization } from "../middleware/authorization";
 import zodSchemaInjector from "../middleware/zodSchemaInjector";
 import { authSchema } from "../validationSchemas/authSchema";
-import { eventVSchema } from "../validationSchemas/event.vali.sche";
+import {
+  eventVSchema,
+  paramsMongooseIdCheck,
+} from "../validationSchemas/event.vali.sche";
 
 const router = express.Router();
 
@@ -38,6 +41,14 @@ router.get(
   authorization,
   zodSchemaInjector(eventVSchema.search),
   eventctrl.search
+);
+
+// delete event
+router.delete(
+  "/delete/:id",
+  authorization,
+  zodSchemaInjector(paramsMongooseIdCheck),
+  eventctrl.deleteEvent
 );
 
 // get all events

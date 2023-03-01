@@ -24,39 +24,37 @@ export interface IWorkout {
 // get all workouts
 const getAll = asyncHandler(
   async (
-    req: Request<{}, {}, {}, { cat: string; focuses: string }>,
+    req: Request<{}, {}, {}, { cat: string; focuses: string; mine: string }>,
     res: Response
   ) => {
     // deciding which data to fetch
-    const { cat, focuses: strFocuses } = req.query;
+    const { cat, focuses: strFocuses, mine } = req.query;
     const focuses = strFocuses ? strFocuses.split(",") : null;
     console.log(cat);
 
     let workouts;
-    // fetching workouts
-    if (cat && focuses) {
-      console.log("cat && focuses");
-      workouts = await WorkoutModel.find({
-        category: cat,
-        focuses: {
-          $in: focuses,
-        },
-      });
-    } else if (cat) {
-      console.log("cat");
-      workouts = await WorkoutModel.find({ category: cat });
-    } else if (focuses) {
-      console.log("focuses");
-      workouts = await WorkoutModel.find({
-        focuses: {
-          $in: focuses,
-        },
-      });
-    } else {
-      console.log("all");
-      workouts = await WorkoutModel.find();
+    console.log(req.query);
+
+    const query: {
+      category?: string;
+      focuses?: { $in: string[] };
+      userId?: string;
+    } = {};
+    if (cat) {
+      query.category = cat;
+    }
+    if (focuses) {
+      query.focuses = {
+        $in: focuses,
+      };
+    }
+    if (mine) {
+      query.userId = req.user!._id.toString();
     }
 
+    console.log(query);
+
+    workouts = await WorkoutModel.find(query);
     workouts = workouts.sort((a, b) => b.likes.length - a.likes.length);
 
     // response
@@ -64,6 +62,26 @@ const getAll = asyncHandler(
       statusText: "success",
       statusCode: 200,
       message: "fetch workouts success",
+      payload: workouts,
+    });
+  }
+);
+
+// search
+const search = asyncHandler(
+  async (req: Request<{ src: string }>, res: Response) => {
+    const { src } = req.query;
+    const workouts = await WorkoutModel.find({
+      title: {
+        $regex: src,
+        $options: "i",
+      },
+    });
+
+    res.status(200).json({
+      statusText: "success",
+      statusCode: 200,
+      message: "search for workout success",
       payload: workouts,
     });
   }
@@ -298,6 +316,7 @@ export const WorkoutCtrl = {
   getAll,
   create,
   deleteWorkout,
+  search,
   update,
   getOne,
   like,
