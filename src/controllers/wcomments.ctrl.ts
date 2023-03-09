@@ -29,7 +29,7 @@ const getComments = asyncHandler(
     let wcomments = await WCommentModel.find({
       workoutId: req.params.id,
     })
-      .sort({ createdAt: 1 })
+      .sort({ createdAt: -1 })
       .lean();
 
     // response

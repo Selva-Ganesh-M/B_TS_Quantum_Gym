@@ -15,7 +15,7 @@ import cookies from "cookie-parser";
 import workoutRouter from "./routes/workout.route";
 import { wCommentCtrl } from "./controllers/wcomments.ctrl";
 import { wCommentRouter } from "./routes/wcomment.router";
-console.log("server");
+import { userRouter } from "./routes/user.router";
 
 const server = express();
 server.use(express.json());
@@ -35,6 +35,8 @@ server.use("/api/events", eventsRouter);
 server.use("/api/workouts", workoutRouter);
 // comments router
 server.use("/api/wComments", wCommentRouter);
+// user routes
+server.use("/api/users", userRouter);
 
 // custom error handler
 server.use(customErrorHandler);

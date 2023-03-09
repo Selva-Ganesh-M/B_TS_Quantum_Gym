@@ -1,11 +1,13 @@
 import { NextFunction, Request, Response } from "express";
-import asyncHandler from "express-async-handler"
+import asyncHandler from "express-async-handler";
 
 const customReqLogger = asyncHandler(
-async (req: Request, res:Response, next: NextFunction) => {
+  async (req: Request, res: Response, next: NextFunction) => {
     console.log(`${req.method}   ${req.url}`);
-    next();
-}
-)
+    console.log(req.body);
 
-export default customReqLogger
+    next();
+  }
+);
+
+export default customReqLogger;

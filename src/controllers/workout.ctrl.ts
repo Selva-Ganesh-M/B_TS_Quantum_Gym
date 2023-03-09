@@ -57,6 +57,8 @@ const getAll = asyncHandler(
     workouts = await WorkoutModel.find(query);
     workouts = workouts.sort((a, b) => b.likes.length - a.likes.length);
 
+    console.log("workouts", workouts);
+
     // response
     res.status(200).json({
       statusText: "success",
@@ -69,14 +71,33 @@ const getAll = asyncHandler(
 
 // search
 const search = asyncHandler(
-  async (req: Request<{ src: string }>, res: Response) => {
-    const { src } = req.query;
-    const workouts = await WorkoutModel.find({
+  async (
+    req: Request<{}, {}, {}, { src: string; mine: string }>,
+    res: Response
+  ) => {
+    const { src, mine } = req.query;
+
+    let query: {
+      title: {
+        $regex: string;
+        $options?: string;
+      };
+      userId?: string;
+    } = {
       title: {
         $regex: src,
         $options: "i",
       },
-    });
+    };
+
+    if (mine) {
+      query.userId = req.user!._id.toString();
+    }
+
+    console.log("query", query);
+
+    const workouts = await WorkoutModel.find(query);
+    console.log("workouts", workouts);
 
     res.status(200).json({
       statusText: "success",
