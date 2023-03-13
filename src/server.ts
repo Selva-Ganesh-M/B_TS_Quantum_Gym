@@ -38,6 +38,16 @@ server.use("/api/wComments", wCommentRouter);
 // user routes
 server.use("/api/users", userRouter);
 
+server.get("/", (req: Request, res: Response) => {
+  res.sendStatus(200);
+});
+
+server.get("/healthz", (req: Request, res: Response) => {
+  res.status(200).json({
+    status: "server is up and healthy.",
+  });
+});
+
 // custom error handler
 server.use(customErrorHandler);
 
