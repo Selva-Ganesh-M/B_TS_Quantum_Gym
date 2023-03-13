@@ -89,6 +89,7 @@ const login = asyncHandler(
     res
       .cookie("access_token", token, {
         httpOnly: true,
+        domain: "https://quantum-gym.netlify.app",
       })
       .status(200)
       .json({
