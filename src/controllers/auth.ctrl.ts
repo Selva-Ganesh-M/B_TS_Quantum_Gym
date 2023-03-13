@@ -90,6 +90,7 @@ const login = asyncHandler(
       .cookie("access_token", token, {
         httpOnly: true,
         sameSite: "none",
+        secure: true,
         //   domain: "https://quantum-gym.netlify.app",
       })
       .status(200)
@@ -121,6 +122,7 @@ const googleAuth = asyncHandler(
         .cookie("access_token", token, {
           httpOnly: true,
           sameSite: "none",
+          secure: true,
           //   domain: "https://quantum-gym.netlify.app",
         })
         .status(200)
