@@ -87,14 +87,11 @@ const login = asyncHandler(
 
     // response
     res
-      .cookie(
-        "access_token",
-        token
-        //  {
-        //   httpOnly: true,
+      .cookie("access_token", token, {
+        httpOnly: true,
+        sameSite: "none",
         //   domain: "https://quantum-gym.netlify.app",
-        // }
-      )
+      })
       .status(200)
       .json({
         statusText: "success",
@@ -121,14 +118,11 @@ const googleAuth = asyncHandler(
 
       // response
       res
-        .cookie(
-          "access_token",
-          token
-          //  {
-          //   httpOnly: true,
+        .cookie("access_token", token, {
+          httpOnly: true,
+          sameSite: "none",
           //   domain: "https://quantum-gym.netlify.app",
-          // }
-        )
+        })
         .status(200)
         .json({
           statusText: "success",
