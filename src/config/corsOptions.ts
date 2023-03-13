@@ -16,6 +16,7 @@ const corsOptions = {
   },
   credentials: true,
   optionsSuccessStatus: 200,
+  exposedHeaders: ["set-cookie", "Date", "ETag"],
 };
 console.log(corsOptions.origin);
 
