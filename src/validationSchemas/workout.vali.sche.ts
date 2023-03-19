@@ -45,6 +45,7 @@ const create = z.object({
         // checking if every string value is a valid mongoose id
         .refine(
           (id) => {
+            console.log("superset id is: ", id);
             return mongoose.isValidObjectId(id);
           },
           { message: "superSetWith has invalid workout ids" }

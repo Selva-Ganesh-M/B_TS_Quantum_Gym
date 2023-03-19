@@ -30,10 +30,8 @@ const getAll = asyncHandler(
     // deciding which data to fetch
     const { cat, focuses: strFocuses, mine } = req.query;
     const focuses = strFocuses ? strFocuses.split(",") : null;
-    console.log(cat);
 
     let workouts;
-    console.log(req.query);
 
     const query: {
       category?: string;
@@ -52,12 +50,8 @@ const getAll = asyncHandler(
       query.userId = req.user!._id.toString();
     }
 
-    console.log(query);
-
     workouts = await WorkoutModel.find(query);
     workouts = workouts.sort((a, b) => b.likes.length - a.likes.length);
-
-    console.log("workouts", workouts);
 
     // response
     res.status(200).json({
@@ -254,6 +248,8 @@ const like = asyncHandler(
         404,
         "like workout failed: requested workout not found"
       );
+
+    console.log("req.user._id", req.user?._id);
 
     // like the workout
     const updatedWorkout = await WorkoutModel.findByIdAndUpdate(
