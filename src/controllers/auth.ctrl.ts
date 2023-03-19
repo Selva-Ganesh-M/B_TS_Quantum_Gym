@@ -49,7 +49,6 @@ const signup = asyncHandler(
 );
 
 // login
-
 const login = asyncHandler(
   async (
     req: Request<{}, {}, { email: string; password: string }>,
@@ -169,5 +168,15 @@ const googleAuth = asyncHandler(
   }
 );
 
-const authController = { signup, login, googleAuth };
+// signout
+const signOut = asyncHandler(async (req: Request, res: Response) => {
+  res.status(200).clearCookie("access_token", { path: "/" }).json({
+    statusText: "success",
+    statusCode: 200,
+    message: "custom_message",
+    payload: "payload",
+  });
+});
+
+const authController = { signup, login, googleAuth, signOut };
 export default authController;
